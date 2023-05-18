@@ -34,8 +34,7 @@
     "bootstrap": "yarn example && yarn install && yarn example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build temp",
     "prepare-repo": "echo y|rm -rf temp && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && echo y|rm -rf *",
-    "prepack": "bob build",
-    "copy-pack": "yarn prepack && npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
+    "copy-pack": "bob build && npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
     "push": "cd temp && git add . && export VERSION=`node -p \"require('./package.json').version\"` &&  git commit -m \"Release $VERSION\" && git push",
     "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && release-it --no-increment --ci"
   },
