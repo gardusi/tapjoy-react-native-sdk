@@ -1,6 +1,6 @@
 {
   "name": "tapjoy-react-native-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -21,6 +21,17 @@
     "!android/gradlew",
     "!android/gradlew.bat",
     "!android/local.properties",
+    "example",
+    "!example/node_modules",
+    "!example/ios/build",
+    "!example/android/build",
+    "!example/android/.gradle",
+    "!example/android/.idea",
+    "!example/android/app/build",
+    "!example/ios/Pods",
+    "!example/ios/Podfile.lock",
+    "!example/ios/TapjoyReactNativeSdkExample.xcodeproj/project.xcworkspace/xcuserdata/*",
+    "!example/ios/TapjoyReactNativeSdkExample.xcworkspace/xcuserdata/*",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -32,8 +43,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install && yarn example pods",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build temp",
-    "prepare-repo": "echo y|rm -rf temp && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && echo y|rm -rf *",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build example/ios/Pods temp package",
+    "prepare-repo": "echo y|rm -rf temp package && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && echo y|rm -rf *",
     "copy-pack": "bob build && npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
     "push": "cd temp && git add . && export VERSION=`node -p \"require('./package.json').version\"` &&  git commit -m \"Release $VERSION\" && git push",
     "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && release-it --no-increment --ci"
@@ -157,7 +168,6 @@
     ]
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0",
-    "tapjoy-react-native-sdk": "file:temp"
+    "eventemitter3": "^5.0.0"
   }
 }
