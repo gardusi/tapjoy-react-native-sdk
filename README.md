@@ -21,9 +21,9 @@ brew install ios-deploy
 
 ### Install Dependency
 
-`yarn` command will install all dependencies including pod dependency.
+`yarn bootstrap` command will install all dependencies including pod dependency.
 ```shell
-yarn
+yarn bootstrap
 ```
 ### Running Example
 

@@ -1,6 +1,6 @@
 {
   "name": "tapjoy-react-native-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -22,6 +22,8 @@
     "!android/gradlew.bat",
     "!android/local.properties",
     "example",
+    "!example/yarn.lock",
+    "!example/yarn-error.log",
     "!example/node_modules",
     "!example/ios/build",
     "!example/android/build",
@@ -43,8 +45,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install && yarn example pods",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build example/ios/Pods temp package",
-    "prepare-repo": "echo y|rm -rf temp package && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && echo y|rm -rf *",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build temp package",
+    "prepare-repo": "rm -rf temp package && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && rm -rf *",
     "copy-pack": "bob build && npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
     "push": "cd temp && git add . && export VERSION=`node -p \"require('./package.json').version\"` &&  git commit -m \"Release $VERSION\" && git push",
     "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && release-it --no-increment --ci"
