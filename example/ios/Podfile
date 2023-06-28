@@ -44,8 +44,6 @@ target 'TapjoyReactNativeSdkExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod "TapjoySDK", "13.0.1"
-
   target 'TapjoyReactNativeSdkExampleTests' do
     inherit! :complete
     # Pods for testing

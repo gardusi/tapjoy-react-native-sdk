@@ -79,7 +79,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation 'com.facebook.react:react-native:0.71.4'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.tapjoy:tapjoy-android-sdk:13.0.1'
+  implementation 'com.tapjoy:tapjoy-android-sdk:13.1.0'
   implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 }
 

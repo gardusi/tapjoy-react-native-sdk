@@ -195,7 +195,7 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
      - Parameter privacyValue: The privacy value string. eg. "1YNN" where 1 is char in string for the version, Y = YES, N = No, - = Not Applicable
     */
     @objc func setUSPrivacy(_ privacyValue: String) {
-        Tapjoy.getPrivacyPolicy().setUSPrivacy(privacyValue)
+        Tapjoy.getPrivacyPolicy().usPrivacy = privacyValue
     }
 
     /**

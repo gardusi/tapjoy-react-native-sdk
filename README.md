@@ -1,5 +1,8 @@
 Tapjoy React Native SDK
 ======================
+React Native plugin for Tapjoy Offerwall SDK which supports Android & iOS platforms.
+
+You can find the end user integration document [here](https://dev.tapjoy.com/en/reactnative-plugin/Quickstart). 
 
 ## Module Development
 ### Setup Environment
@@ -37,7 +40,7 @@ yarn example android
 ```
 
 ### Javascript
-`./src/index.ts` is the typescript module entry point. No wrapper is introduced yet.
+`./src/index.ts` is the typescript module entry point.
 
 ### iOS
 You can find `./ios/TapjoyReactNativeSdk.swift` and `./ios/TapjoyReactNativeSdk.m` for the iOS bridge logic.
@@ -55,6 +58,9 @@ In Xcode, use `Debug > Attach to Process` feature
 
 ### Android
 In Android Studio, use `Run > Attach Debugger to Android Process` feature.
+
+## Integration Document
+[Tapjoy React Native SDK Integration Document](https://dev.tapjoy.com/en/reactnative-plugin/Quickstart).
 
 ## Resources
 ###  Environment setup

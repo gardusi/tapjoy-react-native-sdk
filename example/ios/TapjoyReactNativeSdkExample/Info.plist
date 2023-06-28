@@ -50,9 +50,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-    <key>NSUserTrackingUsageDescription</key>
-    <string>This allows us to deliver personalized ads for you.</string>
+	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This allows us to deliver personalized ads for you.</string>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 </dict>
