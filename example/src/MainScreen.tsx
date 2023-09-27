@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, SafeAreaView, TextInput, Platform, Text } from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  TextInput,
+  Platform,
+  Text,
+  ScrollView,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getTrackingStatus,
@@ -7,7 +14,7 @@ import {
 } from 'react-native-tracking-transparency';
 import styles from './Styles';
 import Button from './Button';
-import Tapjoy, { TJPrivacyPolicy, TJVersion } from 'tapjoy-react-native-sdk';
+import Tapjoy, { TJVersion } from 'tapjoy-react-native-sdk';
 
 const MainScreen: React.FC = () => {
   const [sdkKey, setSdkKey] = useState<string>('');
@@ -37,13 +44,6 @@ const MainScreen: React.FC = () => {
 
   const handleConnect = async () => {
     try {
-      //Privacy related flags
-      let privacyPolicy = new TJPrivacyPolicy();
-      privacyPolicy.setBelowConsentAge(false);
-      privacyPolicy.setSubjectToGDPR(true);
-      privacyPolicy.setUSPrivacy('1---');
-      privacyPolicy.setUserConsent('1');
-
       setIsConnecting(true);
       await AsyncStorage.setItem('sdkKey', sdkKey);
 
@@ -63,8 +63,10 @@ const MainScreen: React.FC = () => {
         'Tapjoy SDK Connected' +
           (userId !== null ? `\nFlags: ${JSON.stringify(flags)}` : '')
       );
-    } catch (error) {
-      setStatusLabelText(`Tapjoy SDK failed to connect: ${error}`);
+    } catch (error: any) {
+      setStatusLabelText(
+        `Tapjoy SDK failed to connect. code: ${error.code}, message: ${error.message}`
+      );
       setIsConnecting(false);
     }
   };
@@ -108,44 +110,48 @@ const MainScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.lineGap}>
-        <Text style={styles.statusText}>{statusLabelText}</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          value={sdkKey}
-          onChangeText={setSdkKey}
-          placeholder="Enter SDK Key"
-        />
-        <Button
-          title="Connect"
-          style={styles.zeroFlex}
-          onPress={handleConnect}
-          disabled={isConnecting || Tapjoy.isConnected()}
-        />
-      </View>
-      <View style={styles.currencyOuterContainer}>
-        <Text style={styles.labelText}>{'Managed Currency:'}</Text>
-        <View style={styles.currencyInnerContainer}>
-          <Button
-            style={styles.buttonGap}
-            title="Get"
-            onPress={getCurrencyBalance}
-          />
-          <Button
-            style={styles.buttonGap}
-            title="Spend"
-            onPress={spendCurrency}
-          />
-          <Button title="Award" onPress={awardCurrency} />
-        </View>
-      </View>
+    <View style={styles.mainContainer}>
+      <ScrollView>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.lineGap}>
+            <Text style={styles.statusText}>{statusLabelText}</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.textInput}
+              value={sdkKey}
+              onChangeText={setSdkKey}
+              placeholder="Enter SDK Key"
+            />
+            <Button
+              title="Connect"
+              style={styles.zeroFlex}
+              onPress={handleConnect}
+              disabled={isConnecting || Tapjoy.isConnected()}
+            />
+          </View>
+          <View style={styles.currencyOuterContainer}>
+            <Text style={styles.labelText}>{'Managed Currency:'}</Text>
+            <View style={styles.currencyInnerContainer}>
+              <Button
+                style={styles.buttonGap}
+                title="Get"
+                onPress={getCurrencyBalance}
+              />
+              <Button
+                style={styles.buttonGap}
+                title="Spend"
+                onPress={spendCurrency}
+              />
+              <Button title="Award" onPress={awardCurrency} />
+            </View>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
       <Text style={styles.versionText}>
         Version: {TJVersion.getPluginVersion()}
       </Text>
-    </SafeAreaView>
+    </View>
   );
 };
 

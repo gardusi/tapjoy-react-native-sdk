@@ -8,3 +8,22 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+# React Native
+-keep class com.facebook.react.devsupport.** { *; }
+-dontwarn com.facebook.react.devsupport.**
+
+-keep class com.facebook.jni.** { *; }
+-keep class com.facebook.flipper.** { *; }
+
+-keep class com.facebook.hermes.unicode.** { *; }
+-keep class com.facebook.jni.** { *; }
+
+# Tapjoy
+-keep public class com.tapjoy.* {
+  public *;
+}
+
+-keepclassmembers public enum com.tapjoy.* {
+  public static final <fields>;
+}

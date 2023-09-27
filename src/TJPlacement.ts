@@ -1,5 +1,6 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import { EventEmitter } from 'eventemitter3';
+import TJEntryPoint from './TJEntryPoint';
 
 const Tapjoy = NativeModules.TapjoyReactNativeSdk;
 const TapjoyEmitter = new NativeEventEmitter(Tapjoy);
@@ -26,10 +27,14 @@ class TJPlacement extends EventEmitter {
     super();
     this.name = name;
     this.error = undefined;
+    Tapjoy.createPlacement(this.name);
   }
 
+  /**
+   * Request placement content.
+   */
   requestContent(): void {
-    var subscription = TapjoyEmitter.addListener(
+    const subscription = TapjoyEmitter.addListener(
       TapjoyEventType,
       (event: TapjoyPlacementEvent) => {
         if (event.name === TJPlacement.REQUEST_DID_SUCCEED) {
@@ -53,8 +58,11 @@ class TJPlacement extends EventEmitter {
     Tapjoy.requestPlacement(this.name);
   }
 
+  /**
+   * Displays the content associated with the placement.
+   */
   showContent(): void {
-    var subscription = TapjoyEmitter.addListener(
+    const subscription = TapjoyEmitter.addListener(
       TapjoyEventType,
       (event: TapjoyPlacementEvent) => {
         if (event.name === TJPlacement.CONTENT_DID_APPEAR) {
@@ -69,12 +77,87 @@ class TJPlacement extends EventEmitter {
     Tapjoy.showPlacement(this.name);
   }
 
+  /**
+   * Checks whether the content is ready for use.
+   *
+   * @returns {boolean} True if the content is ready; otherwise, false.
+   */
   isContentReady(): boolean {
     return Tapjoy.isContentReady(this.name);
   }
 
+  /**
+   * Checks whether the content is available for use.
+   *
+   * @returns {boolean} True if the content is available; otherwise, false.
+   */
   isContentAvailable(): boolean {
     return Tapjoy.isContentAvailable(this.name);
+  }
+
+  /**
+   * Sets the currency balance for given currency id.
+   *
+   * @param {String} currencyId - The identifier of the currency.
+   * @param {Number} currencyBalance - The amount of the currency to set.
+   */
+  async setCurrencyBalance(
+    currencyId: String,
+    currencyBalance: Number
+  ): Promise<void> {
+    await Tapjoy.setCurrencyBalance(currencyBalance, currencyId, this.name);
+  }
+
+  /**
+   * Gets the currency balance for given currency id.
+   *
+   * @param {String} currencyId - The identifier of the currency.
+   * @return {Number} currencyBalance - The amount of the currency.
+   */
+  async getCurrencyBalance(currencyId: String): Promise<Number> {
+    return await Tapjoy.getPlacementCurrencyBalance(currencyId, this.name);
+  }
+
+  /**
+   * Sets the currency amount required
+   *
+   * @param {Number} amount The amount of currency the user needs. Must be greater than 0.
+   * @param {String} currencyId The identifier of the currency.
+   */
+  async setRequiredAmount(amount: Number, currencyId: String): Promise<void> {
+    await Tapjoy.setRequiredAmount(amount, currencyId, this.name);
+  }
+
+  /**
+   * Gets the currency amount required.
+   *
+   * @param {String} currencyId The identifier of the currency.
+   * @return {Number} The amount of currency the user needs. -1 if not available.
+   */
+  async getRequiredAmount(currencyId: String): Promise<Number> {
+    return await Tapjoy.getRequiredAmount(currencyId, this.name);
+  }
+
+  /**
+   * Sets entry point.
+   *
+   * @param {TJEntryPoint} entryPoint - Entry point.
+   * @see TJEntryPoint
+   */
+  setEntryPoint(entryPoint: TJEntryPoint): void {
+    Tapjoy.setEntryPoint(this.name, Object.values(TJEntryPoint).indexOf(entryPoint));
+  }
+
+  /**
+   * Gets entry point.
+   *
+   * @returns Entry point.
+   * @see TJEntryPoint
+   */
+  async getEntryPoint(): Promise<TJEntryPoint | undefined> {
+    const entryPointValue: TJEntryPoint | undefined =
+      Object.values(TJEntryPoint)[await Tapjoy.getEntryPoint(this.name)];
+    return entryPointValue;
   }
 }
 
