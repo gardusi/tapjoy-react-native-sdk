@@ -1,6 +1,6 @@
 {
   "name": "tapjoy-react-native-sdk",
-  "version": "13.2.0",
+  "version": "13.2.1",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
