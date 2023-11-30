@@ -22,7 +22,6 @@ def isNewArchitectureEnabled() {
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
-
 def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
 
 if (isNewArchitectureEnabled()) {
@@ -82,7 +81,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation 'com.facebook.react:react-native:0.71.4'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.tapjoy:tapjoy-android-sdk:13.2.1'
+  implementation 'com.tapjoy:tapjoy-android-sdk:13.3.0'
   implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 }
 

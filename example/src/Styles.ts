@@ -15,6 +15,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  switchContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    justifyContent: 'flex-end',
+  },
   clearButton: {
     flex: 0,
     width: 50,
@@ -22,6 +29,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     height: 40,
+    marginLeft: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -57,8 +65,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
-    marginRight: 10,
     color: 'black',
+  },
+  textInputLabel: {
+    width: 50,
+  },
+  leftSpacing: {
+    marginLeft: 10,
   },
   statusText: {
     color: 'black',
@@ -165,6 +178,7 @@ const styles = StyleSheet.create({
   owLogContainer: {
     height: '30%',
     padding: 10,
+    backgroundColor: '#DDDDDD',
   },
 });
 

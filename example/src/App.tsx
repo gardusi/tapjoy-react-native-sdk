@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import MainScreen from './MainScreen';
 import OfferwallScreen from './OfferwallScreen';
+import OfferwallDiscoverScreen from './OfferwallDiscoverScreen';
 import UserProperties from './UserProperties';
 import styles from './Styles';
 
@@ -20,6 +21,7 @@ export default function App() {
       >
         <Tab.Screen name="Main" component={MainScreen} />
         <Tab.Screen name="Offerwall" component={OfferwallScreen} />
+        <Tab.Screen name="Discover" component={OfferwallDiscoverScreen} />
         <Tab.Screen name="User Properties" component={UserProperties} />
       </Tab.Navigator>
     </NavigationContainer>

@@ -125,7 +125,7 @@ const MainScreen: React.FC = () => {
             />
             <Button
               title="Connect"
-              style={styles.zeroFlex}
+              style={[styles.zeroFlex, styles.leftSpacing]}
               onPress={handleConnect}
               disabled={isConnecting || Tapjoy.isConnected()}
             />

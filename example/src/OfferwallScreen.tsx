@@ -269,7 +269,7 @@ const OfferwallScreen: React.FC = () => {
               autoCapitalize="none"
             />
             <Button
-              style={styles.clearButton}
+              style={[styles.clearButton, styles.leftSpacing]}
               onPress={handleClearInput}
               title={'\u2573'}
             />

@@ -10,7 +10,5 @@ class TapjoyReactNativeSdkPackage : ReactPackage {
     return listOf(TapjoyReactNativeSdkModule(reactContext))
   }
 
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return emptyList()
-  }
+  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> = listOf(TJOfferwallDiscoverNativeViewManager(reactContext))
 }

@@ -260,6 +260,7 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
 
       }
     }
+    Tapjoy.setActivity(this.currentActivity)
     val placement = Tapjoy.getPlacement(placementName, listener)
     placements[placementName] = placement
   }
