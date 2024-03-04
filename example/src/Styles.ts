@@ -44,6 +44,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-start',
   },
+  buttonTag: {
+    backgroundColor: '#FDAA1C',
+    borderRadius: 5,
+    padding: 10,
+    flex: 1,
+    alignSelf: 'flex-start',
+    marginRight: 10,
+  },
   enabledButton: {},
   disabledButton: {
     opacity: 0.5,

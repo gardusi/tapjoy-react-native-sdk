@@ -6,6 +6,8 @@ import {
   Platform,
   Text,
   ScrollView,
+  NativeEventEmitter,
+  NativeModules,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -14,12 +16,18 @@ import {
 } from 'react-native-tracking-transparency';
 import styles from './Styles';
 import Button from './Button';
-import Tapjoy, { TJVersion } from 'tapjoy-react-native-sdk';
+import Tapjoy, { TJVersion, TJConnect } from 'tapjoy-react-native-sdk';
 
 const MainScreen: React.FC = () => {
   const [sdkKey, setSdkKey] = useState<string>('');
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [statusLabelText, setStatusLabelText] = useState('Status Message');
+
+  interface TapjoyEvent {
+    name: string;
+    code: string;
+    message: string;
+  }
 
   useEffect(() => {
     retrieveSdkKey().then();
@@ -50,14 +58,25 @@ const MainScreen: React.FC = () => {
       Tapjoy.setDebugEnabled(true);
       let userId = await AsyncStorage.getItem('userId');
       let flags: object = { TJC_OPTION_USER_ID: userId };
-
       let trackingStatus = await getTrackingStatus();
-      if (trackingStatus === 'authorized' || trackingStatus === 'unavailable') {
-        await Tapjoy.connect(sdkKey, flags);
-      } else {
+      if (trackingStatus !== 'authorized' && trackingStatus !== 'unavailable') {
         await requestTrackingPermission();
-        await Tapjoy.connect(sdkKey, flags);
       }
+      const TJ = NativeModules.TapjoyReactNativeSdk;
+      const TapjoyEmitter = new NativeEventEmitter(TJ);
+      const TapjoyEventType = 'Tapjoy';
+      const subscription = TapjoyEmitter.addListener(
+        TapjoyEventType,
+        (event: TapjoyEvent) => {
+          if (event.name === TJConnect.TJC_CONNECT_WARNING) {
+            subscription.remove();
+            setStatusLabelText(
+              `Tapjoy SDK connected with Warning: ErrorCode: ${event.code} ${event.message} `
+            );
+          }
+        }
+      );
+      await Tapjoy.connect(sdkKey, flags);
       setIsConnecting(false);
       setStatusLabelText(
         'Tapjoy SDK Connected' +

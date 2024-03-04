@@ -34,6 +34,7 @@ const UserProperties: React.FC = () => {
   );
   const [userConsent, setUserConsent] = useState<TJStatus>(TJStatus.Unknown);
   const [userSegment, setUserSegment] = useState<TJSegment>(TJSegment.Unknown);
+  const [userTag, setUserTag] = useState<string>('');
   const [optOut, setOptOut] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
@@ -197,6 +198,21 @@ const UserProperties: React.FC = () => {
     await setMaxLevel('');
   };
 
+  const handleAddUserTag = async () => {
+    Tapjoy.addUserTag(userTag);
+    setUserTag('');
+  };
+
+  const handleRemoveUserTag = async () => {
+    Tapjoy.removeUserTag(userTag);
+    setUserTag('');
+  };
+
+  const handleClearUserTag = async () => {
+    Tapjoy.clearUserTags();
+    setUserTag('');
+  };
+
   const handleSubjectToGDPR = (item: { value: TJStatus; label: string }) => {
     setSubjectToGDPR(item.value);
   };
@@ -252,6 +268,33 @@ const UserProperties: React.FC = () => {
             style={styles.clearButton}
             onPress={handleClearMaxLevel}
             title={'\u2573'}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.userPropertiesLabel}>User Tags:</Text>
+          <TextInput
+            style={styles.textInput}
+            value={userTag}
+            onChangeText={setUserTag}
+            placeholder="Enter user tag"
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.horizontalContainer}>
+          <Button
+            style={styles.buttonTag}
+            onPress={handleAddUserTag}
+            title={'Add'}
+          />
+          <Button
+            style={styles.buttonTag}
+            onPress={handleRemoveUserTag}
+            title={'Remove'}
+          />
+          <Button
+            style={styles.buttonTag}
+            onPress={handleClearUserTag}
+            title={'Clear'}
           />
         </View>
         <View style={styles.selectionContainer}>

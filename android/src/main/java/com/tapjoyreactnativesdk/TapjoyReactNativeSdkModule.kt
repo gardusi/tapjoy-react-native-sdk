@@ -7,7 +7,6 @@ import com.tapjoy.TJSpendCurrencyListener
 import com.tapjoy.TJAwardCurrencyListener
 import com.tapjoy.TJSetUserIDListener
 import com.tapjoy.Tapjoy
-import com.tapjoy.TapjoyConnectCore
 import com.tapjoy.TJError;
 import com.tapjoy.TJPlacement;
 import com.tapjoy.TJActionRequest;
@@ -17,6 +16,7 @@ import com.tapjoy.TJSetCurrencyAmountRequiredListener;
 import com.tapjoy.TJStatus;
 import com.tapjoy.TJPrivacyPolicy;
 import com.tapjoy.TJSegment;
+import com.tapjoy.TapjoyPluginAPI;
 import com.tapjoy.TJEntryPoint
 import java.util.Hashtable
 import kotlin.collections.HashMap
@@ -70,7 +70,7 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
    */
   @ReactMethod
   fun connect(sdkKey: String, connectFlags: ReadableMap, promise: Promise) {
-    TapjoyConnectCore.setPlugin("ReactNative");
+    TapjoyPluginAPI.setPlugin("ReactNative");
 
     Tapjoy.connect(this.currentActivity?.applicationContext, sdkKey, connectFlags.toHashtable(), object : TJConnectListener() {
       override fun onConnectSuccess() {
@@ -80,6 +80,15 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
 
       override fun onConnectFailure(code: Int, message: String) {
         promise.reject(code.toString(), message, Exception(message))
+      }
+      
+      override fun onConnectWarning(code: Int, message: String) {
+        val parameters = Arguments.createMap().apply {
+          putString("name", "onConnectWarning")
+          putString("code", code.toString())
+          putString("message", message)
+        }
+        sendEvent("Tapjoy", parameters)
       }
     })
   }
@@ -186,6 +195,67 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
   fun setMaxLevel(maxLevel: Int) {
     Tapjoy.setMaxLevel(maxLevel);
   }
+
+  /**
+   * Returns a String set which contains tags on the user.
+   *
+   * @return list of user tags
+   */
+  @ReactMethod
+  fun getUserTags(promise: Promise) {
+    val tags = Tapjoy.getUserTags()
+    val tagsArray: WritableArray = Arguments.createArray()
+
+      tags.forEach { tag ->
+          tagsArray.pushString(tag.toString())
+      }
+    promise.resolve(tagsArray)
+  }
+
+  /**
+   * Sets tags for the user.
+   *
+   * @param tags
+   *        the tags to be set
+   */
+  @ReactMethod
+  fun setUserTags(tags: ReadableArray)  {
+     val tagsSet: Set<String> = (0 until tags.size())
+        .mapNotNull { tags.getString(it) }
+        .toSet()
+    Tapjoy.setUserTags(tagsSet)
+  }
+
+  /**
+   * Removes all tags from the user.
+   */
+  @ReactMethod
+  fun clearUserTags() {
+    Tapjoy.clearUserTags()
+  }
+
+  /**
+   * Adds the given tag to the user if it is not already present.
+   *
+   * @param tag
+   *        the tag to be added
+   */
+  @ReactMethod
+  fun addUserTag(tag: String) {
+    Tapjoy.addUserTag(tag)
+  }
+
+  /**
+   * Removes the given tag from the user if it is present.
+   *
+   * @param tag
+   *        the tag to be removed
+   */
+	@ReactMethod
+  fun removeUserTag(tag: String) {
+    Tapjoy.removeUserTag(tag)
+  }
+
 
   @ReactMethod
   fun setDebugEnabled(enabled: Boolean) {

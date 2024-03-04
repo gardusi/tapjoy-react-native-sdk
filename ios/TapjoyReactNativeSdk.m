@@ -11,6 +11,11 @@ RCT_EXTERN_METHOD(setUserId:(NSString *)userId resolve:(RCTPromiseResolveBlock *
 RCT_EXTERN_METHOD(setUserSegment:(nonnull NSNumber *)userSegment)
 RCT_EXTERN_METHOD(getUserSegment: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(setMaxLevel:(int)maxLevel)
+RCT_EXTERN_METHOD(getUserTags: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(setUserTags:(NSArray *)tags)
+RCT_EXTERN_METHOD(clearUserTags)
+RCT_EXTERN_METHOD(addUserTag:(NSString *)tag)
+RCT_EXTERN_METHOD(removeUserTag:(NSString *)tag)
 
 #pragma mark - Placements
 RCT_EXTERN_METHOD(createPlacement:(NSString *)name)

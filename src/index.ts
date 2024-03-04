@@ -5,6 +5,7 @@ import TJVersion from './TJVersion';
 import TJStatus from './TJStatus';
 import TJSegment from './TJSegment';
 import TJOfferwallDiscoverView from './TJOfferwallDiscoverView';
+import TJConnect from './TJConnect';
 
 const LINKING_ERROR =
   `The package 'tapjoy-react-native-sdk' doesn't seem to be linked. Make sure: \n\n` +
@@ -23,5 +24,14 @@ const Tapjoy = NativeModules.TapjoyReactNativeSdk
       }
     );
 
-export { Tapjoy, TJPlacement, TJPrivacyPolicy, TJVersion, TJStatus, TJSegment, TJOfferwallDiscoverView };
+export {
+  Tapjoy,
+  TJPlacement,
+  TJPrivacyPolicy,
+  TJVersion,
+  TJStatus,
+  TJSegment,
+  TJOfferwallDiscoverView,
+  TJConnect,
+};
 export default Tapjoy;

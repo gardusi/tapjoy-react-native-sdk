@@ -16,7 +16,7 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
     
     // MARK: - Events
     @objc override func supportedEvents() -> [String] {
-        return ["TapjoyPlacement"];
+        return ["TapjoyPlacement", "Tapjoy"];
     }
     
     @objc override func startObserving() {
@@ -43,6 +43,7 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
     @objc func connect(_ sdkKey: String, connectFlags: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         if storedResolve == nil {
             NotificationCenter.default.addObserver(self, selector: #selector(tjcConnectSuccess(_:)), name: NSNotification.Name(TJC_CONNECT_SUCCESS), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(tcjConnectWarning(_:)), name: NSNotification.Name(TJC_CONNECT_WARNING), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(tjcConnectFail(_:)), name: NSNotification.Name(TJC_CONNECT_FAILED), object: nil)
         }
 
@@ -62,6 +63,16 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
         storedReject = nil
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(TJC_CONNECT_SUCCESS), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(TJC_CONNECT_FAILED), object: nil)
+    }
+
+    @objc func tcjConnectWarning(_ notifyObj: Notification) {
+        if let error = notifyObj.userInfo?[TJC_CONNECT_USER_INFO_ERROR] as? NSError {
+            var message = error.localizedDescription
+            self.sendEvent(withName: "Tapjoy", body: ["name": "onConnectWarning",
+                                                      "code" : "\(error.code)",
+                                                      "message" : message])
+        }
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(TJC_CONNECT_WARNING), object: nil)
     }
 
     @objc func tjcConnectFail(_ notifyObj: Notification) {
@@ -140,6 +151,59 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
     @objc func setMaxLevel(_ maxLevel: Int32) {
         Tapjoy.setMaxLevel(maxLevel)
     }
+
+    /**
+    * Returns a string set which contains tags on the user.
+    *
+    * @return set of string
+    */
+    @objc func getUserTags(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            if let tags = Tapjoy.getUserTags() {
+                let array = Array(tags)
+                resolve(array)
+            }
+        } catch let error {
+            reject("getUserTags failed", "Failed to get user tags", error)
+        }
+    }
+
+    /**
+    * Sets tags for the user.
+    *
+    * @param tags the tags to be set
+    *             can have up to 200 tags where each tag can have 200 characters
+    */
+    @objc func setUserTags(_ tags: [AnyHashable]) {
+        let tagsSet = Set(tags.compactMap { $0 })
+        Tapjoy.setUserTags(tagsSet)
+    }
+
+    /**
+    * Removes all tags from the user.
+    */
+    @objc func clearUserTags() {
+        Tapjoy.clearUserTags()
+    }
+
+    /**
+    * Adds the given tag to the user if it is not already present.
+    *
+    * @param tag the tag to be added
+    */
+    @objc func addUserTag(_ tag: String) {
+        Tapjoy.addUserTag(tag)
+    }
+
+    /**
+    * Removes the given tag from the user if it is present.
+    *
+    * @param tag the tag to be removed
+    */
+    @objc func removeUserTag(_ tag: String) {
+        Tapjoy.removeUserTag(tag)
+    }
+
     
     // MARK: - Placements
 
