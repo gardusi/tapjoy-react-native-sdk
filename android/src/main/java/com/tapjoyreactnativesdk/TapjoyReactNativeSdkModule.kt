@@ -74,7 +74,6 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
 
     Tapjoy.connect(this.currentActivity?.applicationContext, sdkKey, connectFlags.toHashtable(), object : TJConnectListener() {
       override fun onConnectSuccess() {
-        Tapjoy.setActivity(currentActivity)
         promise.resolve(true)
       }
 
@@ -147,6 +146,11 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
     })
   }
 
+  /**
+   * Sets user ID
+   *
+   * @param userId: User ID
+   */
   @ReactMethod
   fun setUserId(userId: String, promise: Promise) {
     Tapjoy.setUserID(userId, object: TJSetUserIDListener {
@@ -158,6 +162,16 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
         promise.reject("Set User ID Error", Exception(error))
       }
     })
+  }
+
+  /**
+   * Gets user ID
+   *
+   * @return User ID
+   */
+  @ReactMethod
+  fun getUserId(promise: Promise) {
+    promise.resolve(Tapjoy.getUserID())
   }
 
   /**
@@ -194,6 +208,27 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun setMaxLevel(maxLevel: Int) {
     Tapjoy.setMaxLevel(maxLevel);
+  }
+
+  /**
+   * Sets the level of the user.
+   * 
+   * @param userLevel
+   *            the level of the user
+   */
+  @ReactMethod
+  fun setUserLevel(userLevel: Int) {
+    Tapjoy.setUserLevel(userLevel)
+  }
+
+  /**
+   * Gets the level of the user.
+   *
+   * @return the level of the user.
+   */
+  @ReactMethod
+  fun getUserLevel(promise: Promise) {
+    promise.resolve(Tapjoy.getUserLevel())
   }
 
   /**
@@ -330,7 +365,6 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
 
       }
     }
-    Tapjoy.setActivity(this.currentActivity)
     val placement = Tapjoy.getPlacement(placementName, listener)
     placements[placementName] = placement
   }
@@ -477,15 +511,18 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
     promise.resolve(placements[placementName]?.getEntryPoint()?.ordinal)
   }
 
-   /**
-   * Indicate if the user falls in any of the GDPR applicable countries
+  /**
+   * Tracks a purchase
    *
-   * @param gdprApplicable true if GDPR applies to this user, false otherwise
+   * @param currencyCode
+   *            the currency code of price as an alphabetic currency code
+   *            specified in ISO 4217, i.e. "USD", "KRW"
+   * @param price
+   *            the price of product
    */
-  @Deprecated("Use setSubjectToGDPRStatus instead", ReplaceWith("setSubjectToGDPR(gdprApplicable)"))
   @ReactMethod
-  fun setSubjectToGDPR(gdprApplicable: Boolean){
-    Tapjoy.getPrivacyPolicy().setSubjectToGDPR(gdprApplicable)
+  fun trackPurchase(currencyCode: String, price: Double) {
+    Tapjoy.trackPurchase(currencyCode, price)
   }
 
    /**
@@ -568,17 +605,6 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
   /**
    * This method will set ad_tracking_enabled to false for Tapjoy which only shows the user contextual ads. No ad tracking will be done on this user.
    *
-   * @param isBelowConsentAge true if below consent age (COPPA) applies to this user, false otherwise
-   */
-  @Deprecated("Use setBelowConsentAgeStatus instead", ReplaceWith("setBelowConsentAgeStatus(isBelowConsentAgeStatus)"))
-  @ReactMethod
-  fun setBelowConsentAge(isBelowConsentAge: Boolean){
-    Tapjoy.getPrivacyPolicy().setBelowConsentAge(isBelowConsentAge)
-  }
-
-  /**
-   * This method will set ad_tracking_enabled to false for Tapjoy which only shows the user contextual ads. No ad tracking will be done on this user.
-   *
    * @param isBelowConsentAge true (1) if below consent age (COPPA) applies to this user, false (0) otherwise
    */
   @ReactMethod
@@ -596,16 +622,6 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
     Tapjoy.getPrivacyPolicy().setUSPrivacy(isUsPrivacy)
   }
 
-   /**
-   * This is used for sending User's consent to behavioral advertising such as in the context of GDPR
-   *
-   * @param userConsent The value can be "0" (User has not provided consent), "1" (User has provided consent) or a daisybit string as suggested in IAB's Transparency and Consent Framework
-   */
-  @Deprecated("Use setUserConsentStatus instead", ReplaceWith("setUserConsentStatus(userConsentStatus)"))
-  @ReactMethod
-  fun setUserConsent(userConsent: String){
-    Tapjoy.getPrivacyPolicy().setUserConsent(userConsent)
-  }
    /**
    * This is used for sending User's consent to behavioral advertising such as in the context of GDPR
    *

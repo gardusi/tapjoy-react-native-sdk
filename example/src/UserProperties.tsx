@@ -23,8 +23,9 @@ const UserProperties: React.FC = () => {
 
   const [statusLabelText, setStatusLabelText] =
     useState<string>('Status Message');
-  const [userId, _setUserId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
   const [maxLevel, _setMaxLevel] = useState<string>('');
+  const [userLevel, _setUserLevel] = useState<string>('');
   const [USPrivacy, setUSPrivacy] = useState<string>('');
   const [isSubjectToGDPR, setSubjectToGDPR] = useState<TJStatus>(
     TJStatus.Unknown
@@ -60,23 +61,25 @@ const UserProperties: React.FC = () => {
     if (isFocused) {
       retrievePrivacyPolicy().then();
       retrieveUserSegment().then();
+      retrieveUserId().then();
+      retrieveUserLevel().then();
+      retrieveMaxLevel().then();
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    retrieveUserId().then();
-  });
-
-  useEffect(() => {
-    retrieveMaxLevel().then();
-  });
-
+  const retrieveUserLevel = async () => {
+    try {
+      const value = await Tapjoy.getUserLevel();
+      if (value !== null) {
+        await setUserLevel(value.toString());
+      }
+    } catch (error) {
+      setStatusLabelText(`Failed to retrieve User Level: ${error}`);
+    }
+  };
   const retrieveUserId = async () => {
     try {
-      const value = await AsyncStorage.getItem('userId');
-      if (value !== null) {
-        await setUserId(value);
-      }
+      await setUserId(await Tapjoy.getUserId());
     } catch (error) {
       setStatusLabelText(`Failed to retrieve User ID: ${error}`);
     }
@@ -151,9 +154,14 @@ const UserProperties: React.FC = () => {
     try {
       let trimmedUserId = userId.trim();
       let trimmedMaxLevel = maxLevel.trim();
+      let trimmedUserLevel = userLevel.trim();
       let maxLevelValue = -1;
       if (trimmedMaxLevel.length > 0) {
         maxLevelValue = parseInt(trimmedMaxLevel);
+      }
+      let userLevelValue = -1;
+      if (trimmedUserLevel.length > 0) {
+        userLevelValue = parseInt(trimmedUserLevel);
       }
       let privacyPolicy = new TJPrivacyPolicy();
       privacyPolicy.setSubjectToGDPRStatus(isSubjectToGDPR);
@@ -164,9 +172,9 @@ const UserProperties: React.FC = () => {
         privacyPolicy.optOutAdvertisingID(optOut);
       }
       Tapjoy.setUserSegment(userSegment);
-      await AsyncStorage.setItem('userId', trimmedUserId);
       await AsyncStorage.setItem('maxLevel', trimmedMaxLevel);
       await Tapjoy.setMaxLevel(maxLevelValue);
+      await Tapjoy.setUserLevel(userLevelValue);
       await Tapjoy.setUserId(trimmedUserId);
       setStatusLabelText(`User ID set:\n"${trimmedUserId}"`);
     } catch (error) {
@@ -174,16 +182,14 @@ const UserProperties: React.FC = () => {
     }
   };
 
-  const setUserId = async (newUserId: string) => {
-    _setUserId(newUserId);
-    let trimmedUserId = newUserId.trim();
-    await AsyncStorage.setItem('userId', trimmedUserId);
-  };
-
   const setMaxLevel = async (maxLevel: string) => {
     _setMaxLevel(maxLevel);
     let trimmedMaxLevel = maxLevel.trim();
     await AsyncStorage.setItem('maxLevel', trimmedMaxLevel);
+  };
+
+  const setUserLevel = async (userLevel: string) => {
+    _setUserLevel(userLevel);
   };
 
   const handleUSPrivacy = async (newUSPrivacy: string) => {
@@ -196,6 +202,10 @@ const UserProperties: React.FC = () => {
 
   const handleClearMaxLevel = async () => {
     await setMaxLevel('');
+  };
+
+  const handleClearUserLevel = async () => {
+    await setUserLevel('');
   };
 
   const handleAddUserTag = async () => {
@@ -267,6 +277,22 @@ const UserProperties: React.FC = () => {
           <Button
             style={styles.clearButton}
             onPress={handleClearMaxLevel}
+            title={'\u2573'}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.userPropertiesLabel}>User Level:</Text>
+          <TextInput
+            style={styles.textInput}
+            value={userLevel}
+            keyboardType={'numeric'}
+            onChangeText={setUserLevel}
+            placeholder="Enter user level"
+            placeholderTextColor="#888"
+          />
+          <Button
+            style={styles.clearButton}
+            onPress={handleClearUserLevel}
             title={'\u2573'}
           />
         </View>

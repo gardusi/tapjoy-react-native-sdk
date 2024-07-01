@@ -14,14 +14,6 @@ class TJPrivacyPolicy {
     }
   }
 
-  setBelowConsentAge(isBelowConsentAge: boolean): void {
-    Tapjoy.setBelowConsentAge(isBelowConsentAge);
-  }
-
-  setSubjectToGDPR(isSubjectToGDPR: boolean): void {
-    Tapjoy.setSubjectToGDPR(isSubjectToGDPR);
-  }
-
   async getSubjectToGDPR(): Promise<TJStatus> {
     try {
       let isSubjectToGDPR: TJStatus = await Tapjoy.getSubjectToGDPR();
@@ -44,10 +36,6 @@ class TJPrivacyPolicy {
       console.error(err);
       throw err;
     }
-  }
-
-  setUserConsent(userConsent: string): void {
-    Tapjoy.setUserConsent(userConsent);
   }
 
   async getUserConsent(): Promise<TJStatus> {

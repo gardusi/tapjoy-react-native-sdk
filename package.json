@@ -1,6 +1,6 @@
 {
   "name": "tapjoy-react-native-sdk",
-  "version": "13.4.1",
+  "version": "14.0.0",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -48,9 +48,11 @@
     "bootstrap": "yarn example && yarn install && yarn example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build temp package",
     "prepare-repo": "rm -rf temp package && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk . && rm -rf *",
+    "prepare-staging-repo": "rm -rf temp package && mkdir temp && cd temp && git clone git@github.com:Tapjoy/react-native-sdk-staging.git . && rm -rf *",
     "copy-pack": "npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
     "push": "cd temp && git add . && export VERSION=`node -p \"require('./package.json').version\"` &&  git commit -m \"Release $VERSION\" && git push",
-    "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && release-it --no-increment --ci"
+    "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm pkg fix && npm publish",
+    "publish-staging-npm": "yarn prepare-staging-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm pkg fix && npm publish --dry-run"
   },
   "keywords": [
     "react-native",
@@ -59,7 +61,7 @@
     "tapjoy",
     "offerwall"
   ],
-  "repository": "https://github.com/Tapjoy/react-native-sdk",
+  "repository.url": "https://github.com/Tapjoy/react-native-sdk",
   "author": "Tapjoy <grow_tapjoy_sdk@unity3d.com> (https://dev.tapjoy.com)",
   "license": "SEE LICENSE IN <LICENSE>",
   "bugs": {
@@ -72,8 +74,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^18.4.4",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@react-native/metro-config": "^0.73.3",
-    "@release-it/conventional-changelog": "^8.0.1",
+    "@react-native/metro-config": "^0.74.83",
     "@types/jest": "^29.5.11",
     "@types/react": "^18.2.48",
     "commitlint": "^18.4.4",
@@ -84,10 +85,8 @@
     "jest": "^29.7.0",
     "pod-install": "^0.2.0",
     "prettier": "^3.2.4",
-    "react": "18.2.0",
-    "react-native": "^0.73.2",
-    "react-native-builder-bob": "^0.23.2",
-    "release-it": "^17.0.1",
+    "react": "^18.3.1",
+    "react-native": "^0.74.1",
     "typescript": "^5.3.3"
   },
   "resolutions": {
@@ -112,19 +111,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "release-it": {
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": false
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular"
-      }
-    }
   },
   "eslintConfig": {
     "root": true,
@@ -155,20 +141,6 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
   },
   "dependencies": {
     "eventemitter3": "^5.0.0"

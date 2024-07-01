@@ -107,7 +107,6 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android:")
-    implementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -116,7 +115,7 @@ dependencies {
     }
 
     implementation 'com.google.android.gms:play-services-appset:16.0.2'
-    implementation 'com.tapjoy:tapjoy-android-sdk:13.4.1'
+    implementation 'com.tapjoy:tapjoy-android-sdk:14.0.0'
 
 }
 

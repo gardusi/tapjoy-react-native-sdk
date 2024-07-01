@@ -115,13 +115,17 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
         }
     }
 
+    @objc func getUserId(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        resolve(Tapjoy.getUserID())
+    }
+
     /**
     * Sets the segment of the user
     *
     * @param userSegment TJSegment enum 0 (non-payer), 1 (payer), 2 (VIP), -1 (unknown)
     */
     @objc func setUserSegment(_ userSegment: NSNumber) {
-        let segmentMap: [Int: TJSegment] = [
+        let segmentMap: [Int: Segment] = [
             0: .nonPayer,
             1: .payer,
             2: .VIP
@@ -150,6 +154,24 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
      */
     @objc func setMaxLevel(_ maxLevel: Int32) {
         Tapjoy.setMaxLevel(maxLevel)
+    }
+
+    @objc func setUserLevel(_ userLevel: Int32) {
+        Tapjoy.setUserLevel(userLevel)
+    }
+
+    /**
+     * Gets the level of the user.
+     *
+     * @return the level of the user.
+     */
+    @objc func getUserLevel(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            let level = Tapjoy.getUserLevel()
+            resolve(level)
+        } catch let error {
+            reject("getUserLevel failed", "Failed to get user level", error)
+        }
     }
 
     /**
@@ -391,16 +413,6 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
             }
         })
     }
-    
-    // MARK: - Privacy
-    /**
-      Indicate if the user falls in any of the GDPR applicable countries.
-     - Parameter isSubjectToGDPR: true for enabling and false for disabling.
-    */
-    @available(*, deprecated, message: "Use `setSubjectToGDPRStatus(_:)` instead.")
-    @objc func setSubjectToGDPR(_ isSubjectToGDPR: Bool) {
-        Tapjoy.getPrivacyPolicy().setSubjectToGDPR(isSubjectToGDPR)
-    }
 
     /**
      * This can be used by the integrating App to indicate if the user falls in any of the GDPR applicable countries
@@ -415,14 +427,6 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
         TJPrivacyPolicy.sharedInstance().subjectToGDPRStatus = subjectToGDPRStatus
     }
 
-    /**
-     This method will set ad_tracking_enabled to false for Tapjoy which only shows the user contextual ads. No ad tracking will be done on this user.
-     - Parameter isBelowConsentAge: true if the user is affected by COPPA, false if they are not.
-    */
-    @available(*, deprecated, message: "Use `setBelowConsentAgeStatus(_:)` instead.")
-    @objc func setBelowConsentAge(_ isBelowConsentAge: Bool) {
-        Tapjoy.getPrivacyPolicy().setBelowConsentAge(isBelowConsentAge)
-    }
     /**
      * In the US, the Children’s Online Privacy Protection Act (COPPA) imposes certain requirements on operators of online services that (a)
      * have actual knowledge that the connected user is a child under 13 years of age, or (b) operate services (including apps) that are
@@ -450,14 +454,6 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
         Tapjoy.getPrivacyPolicy().usPrivacy = privacyValue
     }
 
-    /**
-    * This is used for sending User's consent to behavioral advertising such as in the context of GDPR
-    * - Parameter userConsent: The value can be "0" (User has not provided consent), "1" (User has provided consent) or a daisybit string as suggested in IAB's Transparency and Consent Framework
-    */
-    @available(*, deprecated, message: "Use `setUserConsentStatus(_:)` instead.")
-    @objc func setUserConsent(_ userConsent: String) {
-        Tapjoy.getPrivacyPolicy().setUserConsent(userConsent)
-    }
     /**
      * This is used for sending User's consent to behavioral advertising such as in the context of GDPR
      * The consent value can be "0" (User has not provided consent), "1" (User has provided consent) or
@@ -538,6 +534,20 @@ class TapjoyReactNativeSdk: RCTEventEmitter {
             default:
                 return TJStatus.unknown
         }
+    }
+
+    // MARK: - Purchase
+    /**
+     * Tracks a purchase
+     *
+     * @param currencyCode
+     *            the currency code of price as an alphabetic currency code
+     *            specified in ISO 4217, i.e. "USD", "KRW"
+     * @param price
+     *            the price of product
+     */
+    @objc func trackPurchase(_ currencyCode: String, price: NSNumber) {
+        Tapjoy.trackPurchase(withCurrencyCode: currencyCode, price: price.doubleValue)
     }
 }
 

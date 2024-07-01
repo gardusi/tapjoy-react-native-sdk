@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   FlatList,
@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import Button from './Button';
 import styles from './Styles';
+import { ConnectContext } from './ConnectContext';
 
 const OfferwallDiscoverScreen: React.FC = () => {
   const widthChangedManually = useRef(false);
@@ -24,17 +25,11 @@ const OfferwallDiscoverScreen: React.FC = () => {
 
   const [offerwallPlacementName, _setOfferwallPlacementName] =
     useState<string>('offerwall_discover');
-  const [isSdkConnected, setIsSdkConnected] = useState<boolean>(false);
 
   const [logData, setLogData] = useState<Array<string>>([]);
   const owdRef: React.MutableRefObject<TJOfferwallDiscoverView | null> =
     useRef<TJOfferwallDiscoverView | null>(null);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsSdkConnected(Tapjoy.isConnected());
-    }, [])
-  );
+  const { isSdkConnected, setIsSdkConnected } = useContext(ConnectContext);
 
   useEffect(() => {
     AsyncStorage.getItem('owdPlacementName').then((value) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   SafeAreaView,
@@ -17,11 +17,13 @@ import {
 import styles from './Styles';
 import Button from './Button';
 import Tapjoy, { TJVersion, TJConnect } from 'tapjoy-react-native-sdk';
+import { ConnectContext } from './ConnectContext';
 
 const MainScreen: React.FC = () => {
   const [sdkKey, setSdkKey] = useState<string>('');
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [statusLabelText, setStatusLabelText] = useState('Status Message');
+  const { isSdkConnected, setIsSdkConnected } = useContext(ConnectContext);
 
   interface TapjoyEvent {
     name: string;
@@ -56,8 +58,9 @@ const MainScreen: React.FC = () => {
       await AsyncStorage.setItem('sdkKey', sdkKey);
 
       Tapjoy.setDebugEnabled(true);
-      let userId = await AsyncStorage.getItem('userId');
-      let flags: object = { TJC_OPTION_USER_ID: userId };
+      // Use the following line to set the user id
+      // let flags: object = { TJC_OPTION_USER_ID: userId };
+      let flags: object = {};
       let trackingStatus = await getTrackingStatus();
       if (trackingStatus !== 'authorized' && trackingStatus !== 'unavailable') {
         await requestTrackingPermission();
@@ -80,8 +83,11 @@ const MainScreen: React.FC = () => {
       setIsConnecting(false);
       setStatusLabelText(
         'Tapjoy SDK Connected' +
-          (userId !== null ? `\nFlags: ${JSON.stringify(flags)}` : '')
+          (Object.keys(flags).length > 0
+            ? `\nFlags: ${JSON.stringify(flags)}`
+            : '')
       );
+      setIsSdkConnected(true);
     } catch (error: any) {
       setStatusLabelText(
         `Tapjoy SDK failed to connect. code: ${error.code}, message: ${error.message}`

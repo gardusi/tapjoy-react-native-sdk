@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   FlatList,
@@ -12,16 +12,16 @@ import dayjs from 'dayjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from './Button';
 import styles, { pickerSelectStyles } from './Styles';
-import Tapjoy, { TJPlacement } from 'tapjoy-react-native-sdk';
+import Tapjoy, { TJPlacement, TJPurchase } from 'tapjoy-react-native-sdk';
 import RNPickerSelect from 'react-native-picker-select';
 import TJEntryPoint from '../../src/TJEntryPoint';
+import { ConnectContext } from './ConnectContext';
 
 let offerwallPlacement: TJPlacement;
 
 const OfferwallScreen: React.FC = () => {
   const [offerwallPlacementName, _setOfferwallPlacementName] =
     useState<string>('offerwall_unit');
-  const [isSdkConnected, setIsSdkConnected] = useState<boolean>(false);
   const [placementState, setPlacementState] = useState<string>('');
   const [logData, setLogData] = useState<Array<string>>([]);
   const [entryPoint, setEntryPoint] = useState<TJEntryPoint>(
@@ -30,12 +30,7 @@ const OfferwallScreen: React.FC = () => {
   const [currencyId, _setCurrencyId] = useState<string>('');
   const [currencyBalance, _setCurrencyBalance] = useState<string>('');
   const [requiredAmount, _setRequiredAmount] = useState<string>('');
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsSdkConnected(Tapjoy.isConnected());
-    }, [])
-  );
+  const { isSdkConnected, setIsSdkConnected } = useContext(ConnectContext);
 
   useEffect(() => {
     retrieveStoredPlacementName();
@@ -204,6 +199,14 @@ const OfferwallScreen: React.FC = () => {
     setPlacementState('loading');
   };
 
+  const sendPurchaseAction = () => {
+    const offerwallPurchase = new TJPurchase();
+    let currency = 'USD';
+    let price = 0.99;
+    offerwallPurchase.trackPurchase(currency, price);
+    addLogItem(`Track Purchase Event - Currency: ${currency} Price: ${price}`);
+  };
+
   const showPlacement = () => {
     addLogItem(offerwallPlacement.name);
     if (placementState !== 'ready') {
@@ -238,8 +241,10 @@ const OfferwallScreen: React.FC = () => {
   };
 
   const addLogItem = (item: string) => {
-    logData.push(dayjs(new Date()).format('HH:mm:ss') + ' ' + item);
-    setLogData(logData);
+    setLogData((prevLogData) => [
+      ...prevLogData,
+      dayjs(new Date()).format('HH:mm:ss') + ' ' + item,
+    ]);
   };
 
   const entryPointArray = [
@@ -350,6 +355,13 @@ const OfferwallScreen: React.FC = () => {
               style={styles.clearButton}
               onPress={handleClearRequiredAmount}
               title={'\u2573'}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+          <Button
+              onPress={sendPurchaseAction}
+              disabled={!isSdkConnected}
+              title={'Purchase'}
             />
           </View>
         </SafeAreaView>

@@ -8,9 +8,12 @@ RCT_EXTERN_METHOD(connect:(NSString *)sdkKey connectFlags:(NSDictionary *)connec
 RCT_EXTERN_METHOD(setDebugEnabled:(BOOL)enabled)
 RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(isConnected)
 RCT_EXTERN_METHOD(setUserId:(NSString *)userId resolve:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(getUserId:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(setUserSegment:(nonnull NSNumber *)userSegment)
 RCT_EXTERN_METHOD(getUserSegment: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(setMaxLevel:(int)maxLevel)
+RCT_EXTERN_METHOD(setUserLevel:(int)userLevel)
+RCT_EXTERN_METHOD(getUserLevel: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(getUserTags: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(setUserTags:(NSArray *)tags)
 RCT_EXTERN_METHOD(clearUserTags)
@@ -36,10 +39,7 @@ RCT_EXTERN_METHOD(spendCurrency:(int)amount resolve:(RCTPromiseResolveBlock *)re
 RCT_EXTERN_METHOD(awardCurrency:(int)amount resolve:(RCTPromiseResolveBlock *)resolve reject:(RCTPromiseRejectBlock)reject)
 
 #pragma mark - Privacy
-RCT_EXTERN_METHOD(setSubjectToGDPR:(BOOL)isSubjectToGDPR)
-RCT_EXTERN_METHOD(setBelowConsentAge:(BOOL)isBelowConsentAge)
 RCT_EXTERN_METHOD(setUSPrivacy:(NSString *)privacyValue)
-RCT_EXTERN_METHOD(setUserConsent:(NSString *)userConsent)
 RCT_EXTERN_METHOD(setBelowConsentAgeStatus:(nonnull NSNumber *)isBelowConsentAgeStatus)
 RCT_EXTERN_METHOD(setSubjectToGDPRStatus:(nonnull NSNumber *)isSubjectToGDPRStatus)
 RCT_EXTERN_METHOD(setUserConsentStatus:(nonnull NSNumber *)userConsentStatus)
@@ -51,5 +51,8 @@ RCT_EXTERN_METHOD(getUSPrivacy: (RCTPromiseResolveBlock)resolve reject:(RCTPromi
 {
   return NO;
 }
+
+#pragma mark - Purchase
+RCT_EXTERN_METHOD(trackPurchase:(NSString *)currencyCode price:(nonnull NSNumber *)price);
 
 @end
