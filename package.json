@@ -1,6 +1,6 @@
 {
   "name": "tapjoy-react-native-sdk",
-  "version": "14.0.1",
+  "version": "14.1.0",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -52,7 +52,9 @@
     "copy-pack": "npm pack && tar xvzf tapjoy-react-native*.tgz && cp -af ./package/* ./temp && rm tapjoy-react-native*.tgz",
     "push": "cd temp && git add . && export VERSION=`node -p \"require('./package.json').version\"` &&  git commit -m \"Release $VERSION\" && git push",
     "publish-npm": "yarn prepare-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm pkg fix && npm publish",
-    "publish-staging-npm": "yarn prepare-staging-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm pkg fix && npm publish --dry-run"
+    "publish-staging-npm": "yarn prepare-staging-repo && yarn copy-pack && yarn push && cd temp && npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm pkg fix && npm publish --dry-run",
+    "doc": "typedoc --entryPointStrategy expand src/*",
+    "tag-main": "export VERSION=`node -p \"require('./package.json').version\"` && git tag $VERSION && git push origin $VERSION"
   },
   "keywords": [
     "react-native",
@@ -86,6 +88,7 @@
     "pod-install": "^0.2.0",
     "prettier": "^3.2.4",
     "react": "^18.3.1",
+    "typedoc": "^0.25.0",
     "react-native": "^0.74.1",
     "typescript": "^5.3.3"
   },

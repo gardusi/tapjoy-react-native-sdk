@@ -152,7 +152,7 @@ const UserProperties: React.FC = () => {
 
   const applyProperties = async () => {
     try {
-      let trimmedUserId = userId.trim();
+      let trimmedUserId = userId?.trim();
       let trimmedMaxLevel = maxLevel.trim();
       let trimmedUserLevel = userLevel.trim();
       let maxLevelValue = -1;

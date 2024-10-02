@@ -152,7 +152,7 @@ class TapjoyReactNativeSdkModule(reactContext: ReactApplicationContext) :
    * @param userId: User ID
    */
   @ReactMethod
-  fun setUserId(userId: String, promise: Promise) {
+  fun setUserId(userId: String?, promise: Promise) {
     Tapjoy.setUserID(userId, object: TJSetUserIDListener {
       override fun onSetUserIDSuccess() {
         promise.resolve(userId)

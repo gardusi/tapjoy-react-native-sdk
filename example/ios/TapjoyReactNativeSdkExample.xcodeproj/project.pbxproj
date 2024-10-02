@@ -499,7 +499,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ECPZ2SRF59;
+				DEVELOPMENT_TEAM = VLCPHQMND2;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -557,7 +557,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tapjoy.reactnative-LLC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tapjoy.reactnative;
 				PRODUCT_NAME = TapjoyReactNativeSdkExample;
 				RCT_NO_LAUNCH_PACKAGER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -579,7 +579,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ECPZ2SRF59;
+				DEVELOPMENT_TEAM = VLCPHQMND2;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -636,7 +636,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tapjoy.reactnative-LLC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tapjoy.reactnative;
 				PRODUCT_NAME = TapjoyReactNativeSdkExample;
 				RCT_NO_LAUNCH_PACKAGER = 1;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
