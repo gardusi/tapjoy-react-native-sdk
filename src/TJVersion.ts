@@ -1,4 +1,4 @@
-const REACT_LIBRARY_VERSION = '14.2.0';
+const REACT_LIBRARY_VERSION = '14.2.1';
 const REACT_LIBRARY_VERSION_SUFFIX = '';
 
 export class TJVersion {
