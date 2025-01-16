@@ -29,7 +29,7 @@ export default class TJOfferwallDiscoverView extends React.Component<TJOfferwall
     super(props);
   }
 
-  render() {
+  override render() {
     return (
       <TJOfferwallDiscoverNativeView
         {...this.props}
