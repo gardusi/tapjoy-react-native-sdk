@@ -4,4 +4,3 @@ declare enum TJStatus {
     Unknown = 2
 }
 export default TJStatus;
-//# sourceMappingURL=TJStatus.d.ts.map

@@ -15,4 +15,3 @@ export default class TJOfferwallDiscoverView extends React.Component<TJOfferwall
     clearContent(): void;
 }
 export {};
-//# sourceMappingURL=TJOfferwallDiscoverView.d.ts.map

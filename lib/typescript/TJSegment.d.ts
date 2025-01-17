@@ -5,4 +5,3 @@ declare enum TJSegment {
     Unknown = -1
 }
 export default TJSegment;
-//# sourceMappingURL=TJSegment.d.ts.map

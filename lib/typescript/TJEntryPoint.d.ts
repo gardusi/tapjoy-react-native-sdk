@@ -11,4 +11,3 @@ declare enum TJEntryPoint {
     TJEntryPointStore = "store"
 }
 export default TJEntryPoint;
-//# sourceMappingURL=TJEntryPoint.d.ts.map

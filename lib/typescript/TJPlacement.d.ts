@@ -73,4 +73,3 @@ declare class TJPlacement extends EventEmitter {
     getEntryPoint(): Promise<TJEntryPoint | undefined>;
 }
 export default TJPlacement;
-//# sourceMappingURL=TJPlacement.d.ts.map

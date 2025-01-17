@@ -11,4 +11,3 @@ declare class TJPrivacyPolicy {
     optOutAdvertisingID(optOut: boolean): void;
 }
 export default TJPrivacyPolicy;
-//# sourceMappingURL=TJPrivacyPolicy.d.ts.map

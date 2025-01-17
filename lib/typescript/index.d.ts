@@ -9,4 +9,3 @@ import TJPurchase from './TJPurchase';
 declare const Tapjoy: any;
 export { Tapjoy, TJPlacement, TJPrivacyPolicy, TJVersion, TJStatus, TJSegment, TJOfferwallDiscoverView, TJConnect, TJPurchase, };
 export default Tapjoy;
-//# sourceMappingURL=index.d.ts.map
