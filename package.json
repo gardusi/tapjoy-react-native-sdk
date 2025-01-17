@@ -1,6 +1,6 @@
 {
   "name": "ngcash-tapjoy-react-native-sdk",
-  "version": "14.2.1",
+  "version": "14.2.2",
   "description": "ReactNative Plugin for Tapjoy SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
